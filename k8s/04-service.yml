@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: failedkite
+  namespace: buildkite
+spec:
+  selector:
+    app: failedkite
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: LoadBalancer
+  loadBalancerIP: YOUR_STATIC_IP
+  loadBalancerSourceRanges: # https://buildkite.com/docs/apis/rest-api/meta
+    - 100.24.182.113/32 # Buildkite Webhook
+    - 35.172.45.249/32 # Buildkite Webhook
+    - 54.85.125.32/32 # Buildkite Webhook
