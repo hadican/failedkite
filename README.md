@@ -4,7 +4,7 @@
 
 Currently, on Buildkite integration settings, you can only notify users via public/private #channel, not individually.
 
-## Usage
+## How it works?
 
 This application provides a `webhook` that should be triggered when a build fails on your Buildkite,
 which will be like `http://your_host:8080/webhook`.
@@ -14,11 +14,6 @@ environment, we recommend creating a reverse proxy with nginx or a similar tool 
 
 You can get more information about Buildkite Webhooks [here](https://buildkite.com/docs/apis/webhooks).
 
-### Author Mapping
-
-You need to provide an `author_mapping.yml` file located in the `/config` directory which matches GitHub usernames to
-Slack email addresses. If no match is found, then `DEFAULT_SLACK_EMAIL` is notified.
-
 ## Dependencies
 
 - Python 3.11
@@ -27,13 +22,29 @@ Slack email addresses. If no match is found, then `DEFAULT_SLACK_EMAIL` is notif
 - gunicorn 21.2.0
 - PyYAML 6.0.1
 
-## Setup
+## Usage
 
 You need:
 
-- GitHub username - Slack email address mapping file
+- `GitHub` username to `Slack` email address mapping file (author mapping)
 - Running `failedkite` webhook
 - A webhook set on Buildkite integration settings ([more info](https://buildkite.com/docs/apis/webhooks)).
+
+You can run Docker container with the existing image on Docker Hub:
+
+```sh
+docker run -v ./author_mapping.yml:/config/author_mapping.yml \
+           -e SLACK_TOKEN=your_slack_token \
+           -e DEFAULT_SLACK_EMAIL=your_default_email \
+           -p 8080:8080 -d hadican/failedkite:latest
+```
+
+This application listens on port `8080` and the endpoint `/webhook` is exposed for receiving Buildkite webhook requests.
+
+### Author Mapping
+
+You need to provide an `author_mapping.yml` file located in the `/config` directory which matches GitHub usernames to
+Slack email addresses. If no match is found, then `DEFAULT_SLACK_EMAIL` is notified.
 
 ### Environment Variables
 
@@ -42,7 +53,7 @@ You need to set the following environment variables:
 - `SLACK_TOKEN`: This is your Slack token, which you can obtain [here](https://api.slack.com/authentication/basics).
 - `DEFAULT_SLACK_EMAIL`: This is the default email address to be notified when the author cannot be identified.
 
-### Docker Setup
+### Build Your Own Image
 
 Your Dockerfile is set to run the app. Here's a basic idea of the Docker commands:
 
@@ -58,7 +69,5 @@ To run the Docker container:
 docker run -v ./author_mapping.yml:/config/author_mapping.yml \
            -e SLACK_TOKEN=your_slack_token \
            -e DEFAULT_SLACK_EMAIL=your_default_email \
-           -p 8080:8080 -d hadican/failedkite:latest
+           -p 8080:8080 -d failedkite
 ```
-
-This application listens on port `8080` and the endpoint `/webhook` is exposed for receiving Buildkite webhook requests.
