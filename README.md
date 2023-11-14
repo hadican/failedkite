@@ -2,7 +2,7 @@
 
 `Failedkite` is a webhook project for `Buildkite` to notify users via direct message (DM) on `Slack` for failed builds.
 
-Currently, on Buildkite integration settings, you can only notify users via public/private #channel, not individually.
+Currently, on Buildkite integration settings, you can only notify users via public/private `#channel`, not individually.
 
 ## How it works?
 
@@ -27,10 +27,10 @@ You can get more information about Buildkite Webhooks [here](https://buildkite.c
 You need:
 
 - `GitHub` username to `Slack` email address mapping file (author mapping)
-- Running `failedkite` webhook
-- A webhook set on Buildkite integration settings ([more info](https://buildkite.com/docs/apis/webhooks)).
+- A `Slack` token ([more info](https://api.slack.com/authentication/token-types)).
+- Running `failedkite` webhook set on `Buildkite` integration settings ([more info](https://buildkite.com/docs/apis/webhooks)).
 
-You can run Docker container with the existing image on Docker Hub:
+You can run a Docker container with the existing image on Docker Hub:
 
 ```sh
 docker run -v ./author_mapping.yml:/config/author_mapping.yml \
