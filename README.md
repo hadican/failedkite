@@ -28,7 +28,7 @@ You need:
 
 - `GitHub` username to `Slack` email address mapping file (author mapping)
 - A `Slack` token ([more info](https://api.slack.com/authentication/token-types)).
-- This webhook to be set on `Buildkite` integration settings ([more info](https://buildkite.com/docs/apis/webhooks)).
+- Running `failedkite` webhook set on `Buildkite` integration settings ([more info](https://buildkite.com/docs/apis/webhooks)).
 
 You can run a Docker container with the existing image on Docker Hub:
 
