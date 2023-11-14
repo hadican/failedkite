@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: failedkite
+  namespace: buildkite
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: failedkite
+  template:
+    metadata:
+      labels:
+        app: failedkite
+    spec:
+      containers:
+        - name: failedkite
+          image: hadican/failedkite:v0.1
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SLACK_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: failedkite-slack-token
+                  key: SLACK_TOKEN
+            - name: DEFAULT_SLACK_EMAIL
+              value: "your_default_slack_email@something.com"
+          volumeMounts:
+            - name: author-mapping-volume
+              mountPath: /config
+      volumes:
+        - name: author-mapping-volume
+          configMap:
+            name: failedkite-author-mapping

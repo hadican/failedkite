@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: failedkite-author-mapping
+  namespace: buildkite
+data:
+  author_mapping.yml: |
+    no_one: arya@stark.com
+    hold_the_door: hodor@ikea.com
+    DragonMama: daenerys@targaryen.com
