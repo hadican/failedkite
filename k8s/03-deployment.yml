@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: failedkite
-          image: hadican/failedkite:v0.1
+          image: hadican/failedkite:latest
           ports:
             - containerPort: 8080
           env:
@@ -28,7 +28,8 @@ spec:
               value: "your_default_slack_email@something.com"
           volumeMounts:
             - name: author-mapping-volume
-              mountPath: /config
+              mountPath: /config/author_mapping.yml
+              subPath: author_mapping.yml
       volumes:
         - name: author-mapping-volume
           configMap:
