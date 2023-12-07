@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "failedkite.name" . }}
+  labels:
+    {{- include "failedkite.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      {{- include "failedkite.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 100%
+  template:
+    metadata:
+      labels:
+        {{- include "failedkite.selectorLabels" . | nindent 8 }}
+        {{- include "failedkite.labels" . | nindent 8 }}
+        {{- if .Values.podLabels }}
+          {{- toYaml .Values.commonPodLabels | nindent 8 }}
+        {{- end }}
+        {{- if .Values.commonPodLabels }}
+          {{- toYaml .Values.commonPodLabels | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - name: http
+          containerPort: {{ .Values.service.port }}
+          protocol: TCP
+        {{- if .Values.resources }}
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
+        {{- end }}
+        env:
+        - name: SLACK_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "failedkite.name" . }}
+              key: SLACK_TOKEN
+        - name: DEFAULT_SLACK_EMAIL
+          value: {{ .Values.slack.defaultEmail | required "slack.defaultEmail is required" | quote }}
+        {{- if .Values.authorMapping }}
+        volumeMounts:
+            - name: {{ include "failedkite.name" . }}-volume
+              mountPath: /config/author_mapping.yml
+              subPath: author_mapping.yml
+        {{- end }}
+      {{- if .Values.authorMapping }}
+      volumes:
+        - name: {{ include "failedkite.name" . }}-volume
+          configMap:
+            name: {{ include "failedkite.name" . }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

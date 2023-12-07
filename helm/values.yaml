@@ -1,0 +1,40 @@
+image: 
+  repository: hadican/failedkite
+  tag: latest 
+  pullPolicy: IfNotPresent
+imagePullSecrets: []
+commonPodLabels: {}
+nameOverride: ''
+fullnameOverride: ''
+replicas: 1 
+resources:
+  limits:
+    memory: 1Gi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+# Add Github username to Slack email address mapping
+authorMapping: 
+  #no_one: arya@stark.com
+  #hold_the_door: hodor@ikea.com
+  #DragonMama: daenerys@targaryen.com
+
+# Provide Slack configuration
+slack: 
+  #apiToken: 
+  #defaultEmail: 
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+# Configure the service
+# When using service type LoadBalancer, the loadBalancerIP and loadBalancerSourceRanges can be added
+service: 
+  type: ClusterIP
+  port: 8080
+  #loadBalancerIP: 10.3.1.3
+  #loadBalancerSourceRanges: 
+  #- 10.4.5.6
+  #- 3.4.5.6
