@@ -38,3 +38,13 @@ service:
   #loadBalancerSourceRanges: 
   #- 10.4.5.6
   #- 3.4.5.6
+
+# Configure ingress 
+ingress: 
+  enabled: false 
+  #class: backend
+  tls: 
+    enabled: false 
+    secretName: tls-key
+  #host: failedkite.webhook.com
+  #annotations: 
