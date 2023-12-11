@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "failedkite.name" . }}
+  name: {{ include "failedkite.fullname" . }}
   labels:
     {{- include "failedkite.labels" . | nindent 4 }}
 spec:
@@ -46,21 +46,21 @@ spec:
         - name: SLACK_TOKEN
           valueFrom:
             secretKeyRef:
-              name: {{ include "failedkite.name" . }}
+              name: {{ include "failedkite.fullname" . }}
               key: SLACK_TOKEN
         - name: DEFAULT_SLACK_EMAIL
           value: {{ .Values.slack.defaultEmail | required "slack.defaultEmail is required" | quote }}
         {{- if .Values.authorMapping }}
         volumeMounts:
-            - name: {{ include "failedkite.name" . }}-volume
+            - name: {{ include "failedkite.fullname" . }}-volume
               mountPath: /config/author_mapping.yml
               subPath: author_mapping.yml
         {{- end }}
       {{- if .Values.authorMapping }}
       volumes:
-        - name: {{ include "failedkite.name" . }}-volume
+        - name: {{ include "failedkite.fullname" . }}-volume
           configMap:
-            name: {{ include "failedkite.name" . }}
+            name: {{ include "failedkite.fullname" . }}
       {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
