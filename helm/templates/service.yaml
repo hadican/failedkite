@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "failedkite.fullname" . }}
+  labels:
+    {{- include "failedkite.labels" . | nindent 4 }}
+spec:
+  ports:
+  - port: {{ .Values.service.port }}
+    targetPort: http
+    protocol: TCP
+    name: http
+  selector:
+    {{- include "failedkite.selectorLabels" . | nindent 4 }}
+  type: {{ .Values.service.type }}
+  {{- if (and (.Values.service.loadBalancerIP) (eq .Values.service.type "LoadBalancer")) }}
+  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
+  {{- end }}
+  {{- if (and (.Values.service.loadBalancerSourceRanges) (eq .Values.service.type "LoadBalancer")) }}
+  loadBalancerSourceRanges: 
+{{- toYaml .Values.service.loadBalancerSourceRanges | nindent 2 }}
+  {{- end }}

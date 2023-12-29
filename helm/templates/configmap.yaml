@@ -1,0 +1,14 @@
+{{- if .Values.authorMapping }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "failedkite.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "failedkite.labels" . | nindent 4 }}
+type: Opaque
+data:
+  author_mapping.yml: |
+    {{ toYaml .Values.authorMapping | nindent 4 }}
+{{- end }}
