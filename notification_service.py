@@ -18,8 +18,9 @@ class NotificationService:
             self.logger.info(trigger_message)
             return trigger_message, 200
 
+        fail_statuses = ["failing", "failed"]
         build_status = build.get("state")
-        if build_status != "failing":
+        if build_status not in fail_statuses:
             build_status_message = f"Not a build failure, no action taken for the build url={build_web_url}."
             return build_status_message, 200
 
