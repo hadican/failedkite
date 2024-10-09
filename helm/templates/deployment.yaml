@@ -50,6 +50,10 @@ spec:
               key: SLACK_TOKEN
         - name: DEFAULT_SLACK_EMAIL
           value: {{ .Values.slack.defaultEmail | required "slack.defaultEmail is required" | quote }}
+        {{- if .Values.slack.ignoreUsers }}
+        - name: IGNORE_USERS
+          value: {{ join "," .Values.slack.ignoreUsers | quote }}
+        {{- end }}
         {{- if .Values.authorMapping }}
         volumeMounts:
             - name: {{ include "failedkite.fullname" . }}-volume
