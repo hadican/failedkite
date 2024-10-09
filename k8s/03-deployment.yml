@@ -26,6 +26,8 @@ spec:
                   key: SLACK_TOKEN
             - name: DEFAULT_SLACK_EMAIL
               value: "your_default_slack_email@something.com"
+            - name: IGNORE_USERS
+              value: "some[bot],another[bot]"
           volumeMounts:
             - name: author-mapping-volume
               mountPath: /config/author_mapping.yml
