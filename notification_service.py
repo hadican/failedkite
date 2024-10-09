@@ -30,6 +30,12 @@ class NotificationService:
             email = build_creator.get("email")
         elif build_author:
             username = build_author.get("username")
+
+            ignore_users: list[str] | None = self.config.ignore_users
+            if ignore_users and username in ignore_users:
+                build_user_message = f"The username={username} was ignored for the failing build url={build_web_url}"
+                return build_user_message, 200
+
             slack_email = self.config.author_mapping.get(username)
 
             if slack_email:
