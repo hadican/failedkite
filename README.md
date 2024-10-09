@@ -52,6 +52,7 @@ You need to set the following environment variables:
 
 - `SLACK_TOKEN`: This is your Slack token, which you can obtain [here](https://api.slack.com/authentication/basics).
 - `DEFAULT_SLACK_EMAIL`: This is the default email address to be notified when the author cannot be identified.
+- `IGNORE_USERS`: A comma-separated list of usernames to ignore.
 
 ### Build Your Own Image
 
@@ -69,5 +70,6 @@ To run the Docker container:
 docker run -v ./author_mapping.yml:/config/author_mapping.yml \
            -e SLACK_TOKEN=your_slack_token \
            -e DEFAULT_SLACK_EMAIL=your_default_email \
+           -e IGNORE_USERS="some[bot],another[bot]" \
            -p 8080:8080 -d failedkite
 ```
